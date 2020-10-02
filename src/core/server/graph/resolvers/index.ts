@@ -54,6 +54,7 @@ import { SlackConfiguration } from "./SlackConfiguration";
 import { SSOAuthIntegration } from "./SSOAuthIntegration";
 import { StaffConfiguration } from "./StaffConfig";
 import { Story } from "./Story";
+import { StoryRatings } from "./StoryRatings";
 import { StorySettings } from "./StorySettings";
 import { Subscription } from "./Subscription";
 import { SuspensionStatus } from "./SuspensionStatus";
@@ -124,6 +125,7 @@ const Resolvers: GQLResolver = {
   SlackConfiguration,
   SSOAuthIntegration,
   Story,
+  StoryRatings,
   StorySettings,
   Subscription,
   SuspensionStatus,
