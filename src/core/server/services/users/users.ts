@@ -1014,6 +1014,7 @@ export async function ban(
   userID: string,
   message: string,
   rejectExistingComments: boolean,
+  siteIDs?: string[] | null,
   now = new Date()
 ) {
   // Get the user being banned to check to see if the user already has an
@@ -1030,7 +1031,15 @@ export async function ban(
   }
 
   // Ban the user.
-  const user = await banUser(mongo, tenant.id, userID, banner.id, message, now);
+  const user = await banUser(
+    mongo,
+    tenant.id,
+    userID,
+    banner.id,
+    message,
+    siteIDs,
+    now
+  );
 
   if (rejectExistingComments) {
     await rejector.add({
