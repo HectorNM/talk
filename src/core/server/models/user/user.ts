@@ -1770,6 +1770,9 @@ export async function removeUserBan(
           },
         },
         {
+          "status.ban.siteIDs.0": { $exists: true },
+        },
+        {
           "status.ban.history": {
             $size: 0,
           },
@@ -1779,6 +1782,7 @@ export async function removeUserBan(
     {
       $set: {
         "status.ban.active": false,
+        "status.ban.siteIDs": [],
       },
       $push: {
         "status.ban.history": ban,
