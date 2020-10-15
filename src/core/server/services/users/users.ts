@@ -62,6 +62,7 @@ import {
   removeUserBan,
   removeUserIgnore,
   removeUserPremod,
+  removeUserSiteBan,
   removeUserWarning,
   retrieveUser,
   retrieveUserWithEmail,
@@ -1354,7 +1355,7 @@ export async function removeBan(
   }
   // Remove a site ban
   else if (banStatus.siteIDs && banStatus.siteIDs.length > 0) {
-    return removeUserBan(
+    return removeUserSiteBan(
       mongo,
       tenant.id,
       userID,

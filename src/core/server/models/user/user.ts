@@ -1792,6 +1792,55 @@ export async function banUser(
   return result.value;
 }
 
+export async function removeUserSiteBan(
+  mongo: Db,
+  tenantID: string,
+  id: string,
+  createdBy: string,
+  now = new Date(),
+  siteIDs?: string[]
+) {
+  // Create the new ban.
+  const ban: BanStatusHistory = {
+    id: uuid(),
+    active: false,
+    createdBy,
+    createdAt: now,
+    siteIDs,
+  };
+
+  // Try to update the user if the user isn't already banned.
+  const result = await collection(mongo).findOneAndUpdate(
+    {
+      id,
+      tenantID,
+    },
+    {
+      $push: {
+        "status.ban.history": ban,
+      },
+    },
+    {
+      // False to return the updated document instead of the original
+      // document.
+      returnOriginal: false,
+    }
+  );
+
+  if (!result.value) {
+    // Get the user so we can figure out why the ban operation failed.
+    const user = await retrieveUser(mongo, tenantID, id);
+    if (!user) {
+      throw new UserNotFoundError(id);
+    }
+
+    // The user wasn't banned already, so nothing needs to be done!
+    return user;
+  }
+
+  return result.value;
+}
+
 /**
  * removeUserBan will lift a user ban from a User allowing them to interact with
  * the site again.
@@ -1831,9 +1880,6 @@ export async function removeUserBan(
           },
         },
         {
-          "status.ban.siteIDs.0": { $exists: true },
-        },
-        {
           "status.ban.history": {
             $size: 0,
           },
@@ -1843,7 +1889,6 @@ export async function removeUserBan(
     {
       $set: {
         "status.ban.active": false,
-        "status.ban.siteIDs": [],
       },
       $push: {
         "status.ban.history": ban,
