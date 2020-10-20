@@ -475,6 +475,7 @@ export const CommentContainer: FunctionComponent<Props> = ({
                             comment={comment}
                             story={story}
                             viewer={viewer!}
+                            settings={settings}
                           />
                         )}
                       </Flex>
@@ -708,6 +709,7 @@ const enhanced = withContext(({ eventEmitter }) => ({ eventEmitter }))(
             ...UserTagsContainer_settings
             ...MediaSectionContainer_settings
             ...UsernameWithPopoverContainer_settings
+            ...CaretContainer_settings
           }
         `,
       })(CommentContainer)
